@@ -25,14 +25,18 @@ import com.example.legends.ui.theme.DarkNavbarColor
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
 import com.example.legends.CharactersMenuActivity
 import com.example.legends.MainActivity
 import com.example.legends.ui.theme.NavigationDrawerSelected
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationMenu(modifier: Modifier = Modifier, context: Context) {
+fun CharactersNavigationMenu(modifier: Modifier = Modifier, context: Context) {
 
     val charactersMenuActivityIntent = Intent(context, CharactersMenuActivity::class.java)
 
@@ -90,6 +94,13 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: Context) {
             topBar = {
                 TopNavbar(drawerState = drawerState)
             }
-        ) {}
+        ) { innerPadding ->
+            Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+                Text("ok", modifier = Modifier
+                    .align(Alignment.Center) // Centre le texte
+                    .padding(32.dp)) // Ajoute un padding autour du texte
+            }
+            }
+        }
+
     }
-}

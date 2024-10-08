@@ -1,31 +1,29 @@
 package com.example.legends
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.legends.navigation.CharactersNavigationMenu
 import com.example.legends.navigation.NavigationMenu
 import com.example.legends.ui.theme.LegendsTheme
 
-class MainActivity : ComponentActivity() {
+class CharacterActivity : ComponentActivity() {
 
-    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
-
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             LegendsTheme {
-                Scaffold { contentPadding ->
-                    NavigationMenu(modifier = Modifier.padding(contentPadding), context = this)
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    CharactersNavigationMenu(modifier = Modifier.padding(innerPadding), context = this)
                 }
             }
         }
