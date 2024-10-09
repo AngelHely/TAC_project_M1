@@ -1,10 +1,13 @@
 package com.example.legends
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
@@ -12,6 +15,7 @@ import com.example.legends.navigation.NavigationMenu
 import com.example.legends.ui.theme.LegendsTheme
 
 class MainActivity : ComponentActivity() {
+
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,7 +23,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             LegendsTheme {
                 Scaffold { contentPadding ->
-                    NavigationMenu(modifier = Modifier.padding(contentPadding))
+                    NavigationMenu(modifier = Modifier.padding(contentPadding), context = this) {
+
+                    }
                 }
             }
         }

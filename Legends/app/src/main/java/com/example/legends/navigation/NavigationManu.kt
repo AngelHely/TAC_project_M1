@@ -1,13 +1,11 @@
 package com.example.legends.navigation
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -23,11 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.legends.ui.theme.DarkNavbarColor
-import com.example.legends.ui.theme.NavigationDrawerSelected
+import android.app.Activity
+import android.content.Intent
+import androidx.activity.ComponentActivity
+import com.example.legends.CharactersMenuActivity
+import com.example.legends.MainActivity
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationMenu(modifier: Modifier = Modifier) {
+fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view : @Composable () -> Unit) {
+
+    val charactersMenuActivityIntent = Intent(context, CharactersMenuActivity::class.java)
 
     val itemColors =  NavigationDrawerItemDefaults.colors(
         unselectedContainerColor = Color.Transparent,
@@ -49,7 +54,9 @@ fun NavigationMenu(modifier: Modifier = Modifier) {
                 NavigationDrawerItem(
                     label = { Text(text = "Accueil") },
                     selected = false,
-                    onClick = { /*TODO*/ },
+                    onClick = { if (context !is MainActivity) {
+                        context.finish()
+                    } },
                     icon = { Icon(
                         imageVector = Icons.Default.Home,
                         contentDescription = "Navigation drawer : home",
@@ -63,7 +70,10 @@ fun NavigationMenu(modifier: Modifier = Modifier) {
                 NavigationDrawerItem(
                     label = { Text(text = "Personnages") },
                     selected = false,
-                    onClick = { /*TODO*/ },
+                    onClick = { (context as? Activity)?.startActivity(charactersMenuActivityIntent)
+                        if (context !is MainActivity) {
+                            context.finish()
+                        }},
                     icon = { Icon(
                         imageVector = Icons.Default.AccountBox,
                         contentDescription = "Navigation drawer : characters",
@@ -78,6 +88,8 @@ fun NavigationMenu(modifier: Modifier = Modifier) {
             topBar = {
                 TopNavbar(drawerState = drawerState)
             }
-        ) {}
+        ) {
+            view()
+        }
     }
 }
