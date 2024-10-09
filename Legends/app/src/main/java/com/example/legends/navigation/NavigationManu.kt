@@ -1,7 +1,6 @@
 package com.example.legends.navigation
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -23,16 +22,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.legends.ui.theme.DarkNavbarColor
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
+import androidx.activity.ComponentActivity
 import com.example.legends.CharactersMenuActivity
 import com.example.legends.MainActivity
-import com.example.legends.ui.theme.NavigationDrawerSelected
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationMenu(modifier: Modifier = Modifier, context: Context) {
+fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view : @Composable () -> Unit) {
 
     val charactersMenuActivityIntent = Intent(context, CharactersMenuActivity::class.java)
 
@@ -57,7 +55,7 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: Context) {
                     label = { Text(text = "Accueil") },
                     selected = false,
                     onClick = { if (context !is MainActivity) {
-                        (context as? Activity)?.finish()
+                        context.finish()
                     } },
                     icon = { Icon(
                         imageVector = Icons.Default.Home,
@@ -74,7 +72,7 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: Context) {
                     selected = false,
                     onClick = { (context as? Activity)?.startActivity(charactersMenuActivityIntent)
                         if (context !is MainActivity) {
-                            (context as? Activity)?.finish()
+                            context.finish()
                         }},
                     icon = { Icon(
                         imageVector = Icons.Default.AccountBox,
@@ -90,6 +88,8 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: Context) {
             topBar = {
                 TopNavbar(drawerState = drawerState)
             }
-        ) {}
+        ) {
+            view()
+        }
     }
 }

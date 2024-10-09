@@ -70,4 +70,17 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // For API Call
+    // Retrofit
+    implementation (libs.retrofit)
+    // Moshi
+    implementation (libs.moshi)
+    implementation (libs.moshi.kotlin)
+    implementation (libs.converter.moshi)
+    // Glide
+    implementation (libs.compose)
+    // Coil
+    implementation (libs.coil)
+    implementation (libs.coil.compose)
 }

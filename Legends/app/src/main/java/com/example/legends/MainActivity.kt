@@ -16,8 +16,6 @@ import com.example.legends.ui.theme.LegendsTheme
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
-
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +23,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             LegendsTheme {
                 Scaffold { contentPadding ->
-                    NavigationMenu(modifier = Modifier.padding(contentPadding), context = this)
+                    NavigationMenu(modifier = Modifier.padding(contentPadding), context = this) {
+
+                    }
                 }
             }
         }
