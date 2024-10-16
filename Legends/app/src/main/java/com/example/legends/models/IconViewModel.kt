@@ -1,6 +1,7 @@
 package com.example.legends.models
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
@@ -13,7 +14,9 @@ class IconViewModel : ViewModel(){
 
     private val _icons = mutableStateOf<List<Icon>>(listOf())
 
-    val icons : State<List<Icon>> = _icons
+    val icons : MutableState<List<Icon>> = _icons
+
+    var size : Int = 0
 
     init {
         getIcons()
@@ -23,7 +26,12 @@ class IconViewModel : ViewModel(){
         viewModelScope.launch {
             val apiService = APIService.retrofitIconService
             try {
-                _icons.value = apiService.getIcons()
+                val response = apiService.getIcons()
+
+                _icons.value = response.data.values.map { champion ->
+                    Icon(champion.image.image)
+                }
+                size = _icons.value.size
             } catch (e: Exception) {
                     Log.d("ICON", "error : ${e.message.toString()}")
             }
