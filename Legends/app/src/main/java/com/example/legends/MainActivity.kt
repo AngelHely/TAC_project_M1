@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
             LegendsTheme {
                 Scaffold { contentPadding ->
                     NavigationMenu(modifier = Modifier.padding(contentPadding), context = this) {
-                       param1, param2 ->
+                       param1, param2, param3 ->
                     }
                 }
             }
