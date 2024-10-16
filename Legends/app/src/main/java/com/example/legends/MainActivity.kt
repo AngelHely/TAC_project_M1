@@ -1,13 +1,10 @@
 package com.example.legends
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
@@ -24,7 +21,7 @@ class MainActivity : ComponentActivity() {
             LegendsTheme {
                 Scaffold { contentPadding ->
                     NavigationMenu(modifier = Modifier.padding(contentPadding), context = this) {
-
+                       param1, param2 ->
                     }
                 }
             }

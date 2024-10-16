@@ -24,13 +24,14 @@ import com.example.legends.ui.theme.DarkNavbarColor
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.padding
 import com.example.legends.CharactersMenuActivity
 import com.example.legends.MainActivity
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view : @Composable () -> Unit) {
+fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view: @Composable (Any?, Modifier) -> Unit) {
 
     val charactersMenuActivityIntent = Intent(context, CharactersMenuActivity::class.java)
 
@@ -88,8 +89,8 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
             topBar = {
                 TopNavbar(drawerState = drawerState)
             }
-        ) {
-            view()
+        ) { innerPadding ->
+            view(0, Modifier.padding(innerPadding))
         }
     }
 }

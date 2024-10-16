@@ -6,7 +6,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 
-const val BASE_URL = ""
+const val BASE_URL = "https://ddragon.leagueoflegends.com/"
 
 val moshiBuilder: Moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())
@@ -17,8 +17,8 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 interface CharacterIconAPI {
-    @GET("icons")
-    suspend fun getIcons(): List<Icon>
+    @GET("/cdn/13.16.1/data/fr_FR/champion.json")
+    suspend fun getIcons(): ChampionsList
 }
 
 
