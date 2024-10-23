@@ -3,7 +3,6 @@ package com.example.legends.models
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.legends.api.APIService
@@ -28,9 +27,7 @@ class IconViewModel : ViewModel(){
             try {
                 val response = apiService.getIcons()
 
-                _icons.value = response.data.values.map { champion ->
-                    Icon(champion.image.image)
-                }
+                _icons.value = response.data.values.toList()
                 size = _icons.value.size
             } catch (e: Exception) {
                     Log.d("ICON", "error : ${e.message.toString()}")

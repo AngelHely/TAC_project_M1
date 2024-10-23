@@ -5,6 +5,7 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 const val BASE_URL = "https://ddragon.leagueoflegends.com/"
 
@@ -16,14 +17,16 @@ private val retrofit = Retrofit.Builder()
     .addConverterFactory(MoshiConverterFactory.create(moshiBuilder))
     .build()
 
-interface CharacterIconAPI {
+interface CharacterAPI {
     @GET("/cdn/13.16.1/data/fr_FR/champion.json")
-    suspend fun getIcons(): ChampionsList
+    suspend fun getIcons(): IconsList
+    @GET("/cdn/13.16.1/data/en_US/champion/{ChampID}.json")
+    suspend fun getCharacters(@Path("ChampID") champID: String?) : Character
 }
 
 
 object APIService{
-    val retrofitIconService : CharacterIconAPI by lazy {
-        retrofit.create(CharacterIconAPI::class.
+    val retrofitIconService : CharacterAPI by lazy {
+        retrofit.create(CharacterAPI::class.
         java) }
 }

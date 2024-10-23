@@ -24,16 +24,30 @@ import com.example.legends.ui.theme.DarkNavbarColor
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.IconButton
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.navigation.compose.rememberNavController
 import com.example.legends.CharactersMenuActivity
 import com.example.legends.MainActivity
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view: @Composable (Any?, Modifier) -> Unit) {
+fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view: @Composable (Modifier, Any?) -> Unit) {
 
     val charactersMenuActivityIntent = Intent(context, CharactersMenuActivity::class.java)
+    var currentRoute by remember { mutableStateOf(Routes.LazyVerticalGrid.choice) }
 
     val itemColors =  NavigationDrawerItemDefaults.colors(
         unselectedContainerColor = Color.Transparent,
@@ -88,9 +102,25 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
         Scaffold(
             topBar = {
                 TopNavbar(drawerState = drawerState)
+            },
+            bottomBar = {
+                BottomAppBar(actions = {
+                    Row (modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
+                        IconButton(onClick = { currentRoute = Routes.List.choice }) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.List,
+                                contentDescription = "List"
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(175.dp))
+                        IconButton(onClick = { currentRoute = Routes.LazyVerticalGrid.choice }) {
+                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Column")
+                        }
+                    }
+                })
             }
         ) { innerPadding ->
-            view(0, Modifier.padding(innerPadding))
+            view(Modifier.padding(innerPadding), currentRoute)
         }
     }
 }
