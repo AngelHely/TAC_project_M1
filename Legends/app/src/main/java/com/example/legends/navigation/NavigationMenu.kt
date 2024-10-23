@@ -23,11 +23,18 @@ import androidx.compose.ui.unit.dp
 import com.example.legends.ui.theme.DarkNavbarColor
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Menu
@@ -37,9 +44,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.navigation.compose.rememberNavController
 import com.example.legends.CharactersMenuActivity
 import com.example.legends.MainActivity
+import com.example.legends.ui.theme.DarkDisabledTextColor
+import com.example.legends.ui.theme.DarkTextColor
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -47,13 +58,16 @@ import com.example.legends.MainActivity
 fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view: @Composable (Modifier, Any?) -> Unit) {
 
     val charactersMenuActivityIntent = Intent(context, CharactersMenuActivity::class.java)
-    var currentRoute by remember { mutableStateOf(Routes.LazyVerticalGrid.choice) }
+    var currentRoute by remember { mutableStateOf(Routes.List.choice) }
+
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val itemColors =  NavigationDrawerItemDefaults.colors(
         unselectedContainerColor = Color.Transparent,
-        unselectedIconColor = Color.White,
-        selectedIconColor = Color.White,
-        unselectedTextColor = Color.White,
+        unselectedIconColor = DarkTextColor,
+        selectedIconColor = DarkTextColor,
+        unselectedTextColor = DarkTextColor,
     )
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -80,7 +94,7 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
                     colors = itemColors,
                 )
                 HorizontalDivider(
-                    color = Color.Gray,
+                    color = DarkTextColor,
                 )
                 NavigationDrawerItem(
                     label = { Text(text = "Personnages") },
@@ -104,23 +118,42 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
                 TopNavbar(drawerState = drawerState)
             },
             bottomBar = {
-                BottomAppBar(actions = {
-                    Row (modifier = Modifier.fillMaxSize(), horizontalArrangement = Arrangement.Center) {
-                        IconButton(onClick = { currentRoute = Routes.List.choice }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.List,
-                                contentDescription = "List"
-                            )
+                BottomAppBar(
+                    modifier = Modifier.height(if (isLandscape) 60.dp else 105.dp),
+                    containerColor = DarkNavbarColor,
+                    actions = {
+
+                        Row (
+                            modifier = Modifier
+                                .fillMaxSize(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            IconButton(onClick = { currentRoute = Routes.List.choice }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.List,
+                                    contentDescription = "List",
+                                    tint =
+                                        if (currentRoute == Routes.List.choice) DarkTextColor
+                                        else DarkDisabledTextColor,
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(175.dp))
+                            IconButton(onClick = { currentRoute = Routes.LazyVerticalGrid.choice }) {
+                                Icon(
+                                    imageVector = Icons.Default.Menu,
+                                    contentDescription = "Column",
+                                    tint =
+                                        if (currentRoute == Routes.LazyVerticalGrid.choice) DarkTextColor
+                                        else DarkDisabledTextColor,
+                                )
+                            }
                         }
-                        Spacer(modifier = Modifier.width(175.dp))
-                        IconButton(onClick = { currentRoute = Routes.LazyVerticalGrid.choice }) {
-                            Icon(imageVector = Icons.Default.Menu, contentDescription = "Column")
-                        }
-                    }
+
                 })
             }
         ) { innerPadding ->
-            view(Modifier.padding(innerPadding), currentRoute)
+            view(Modifier.padding(innerPadding).fillMaxWidth(), currentRoute)
         }
     }
 }

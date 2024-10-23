@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.legends.ui.theme.DarkNavbarColor
+import com.example.legends.ui.theme.DarkTextColor
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,7 +42,7 @@ fun TopNavbar(drawerState: DrawerState) {
                     imageVector = Icons.Default.Menu,
                     contentDescription = "Navbar Icon",
                     modifier = Modifier.size(iconSize.dp),
-                    tint = Color.White,
+                    tint = DarkTextColor,
                 )
             }
         },
@@ -51,7 +52,7 @@ fun TopNavbar(drawerState: DrawerState) {
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings Navbar Icon",
                     modifier = Modifier.size(iconSize.dp),
-                    tint = Color.White,
+                    tint = DarkTextColor,
                 )
             }
         },

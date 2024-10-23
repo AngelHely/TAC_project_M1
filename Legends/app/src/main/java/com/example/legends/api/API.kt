@@ -20,7 +20,7 @@ private val retrofit = Retrofit.Builder()
 interface CharacterAPI {
     @GET("/cdn/13.16.1/data/fr_FR/champion.json")
     suspend fun getIcons(): IconsList
-    @GET("/cdn/13.16.1/data/en_US/champion/{ChampID}.json")
+    @GET("/cdn/13.16.1/data/fr_FR/champion/{ChampID}.json")
     suspend fun getCharacters(@Path("ChampID") champID: String?) : Character
 }
 
