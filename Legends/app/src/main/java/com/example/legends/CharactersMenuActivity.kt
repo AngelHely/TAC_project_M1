@@ -139,8 +139,7 @@ class CharactersMenuActivity : ComponentActivity() {
         BackHandler {
             navController.popBackStack()
         }
-        val character = vm.getCharacters(id)
-//        Log.d("CHARACTER", "${character}")
+        val character = vm.getCharacter(id)
         Column(modifier = modifier) {
             AsyncImage(model= "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${character.image.image}" , null)
         }
