@@ -25,22 +25,19 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
-import com.example.legends.api.Character
-import com.example.legends.api.Icon
-import com.example.legends.models.CharacterViewModel
-import com.example.legends.models.IconViewModel
+import com.example.legends.models.Icon
+import com.example.legends.viewModels.CharacterViewModel
+import com.example.legends.viewModels.IconViewModel
 import com.example.legends.navigation.NavigationMenu
 import com.example.legends.navigation.Routes
 import com.example.legends.ui.theme.DarkBackgroundColor
 import com.example.legends.ui.theme.DarkCharacterCardColor
-import com.example.legends.ui.theme.DarkNavbarColor
 import com.example.legends.ui.theme.LegendsTheme
 
 class CharactersMenuActivity : ComponentActivity() {
@@ -94,21 +91,10 @@ class CharactersMenuActivity : ComponentActivity() {
         BackHandler {
             navController.popBackStack()
         }
-        LazyVerticalGrid (columns = GridCells.Fixed(2),modifier = modifier) {
+        LazyVerticalGrid (columns = GridCells.Fixed(2),modifier = modifier.background(color = DarkBackgroundColor)) {
             Log.d("SIZE", "${vm.size}")
-            items(vm.icons.value) { icon ->
-                Card (
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(8.dp)
-                        .clickable { navController.navigate("Details/${icon.id}") },
-                    content = {
-                        Column(Modifier.padding(16.dp)) {
-                            AsyncImage(model= "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${icon.image.image}" , null)
-                        }
-                    }
-                )
-
+            items(vm.icons.value) {
+                icon -> CharacterCard(icon, navController)
             }
         }
     }

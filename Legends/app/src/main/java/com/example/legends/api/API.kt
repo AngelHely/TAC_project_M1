@@ -1,5 +1,7 @@
 package com.example.legends.api
 
+import com.example.legends.models.Character
+import com.example.legends.models.IconsList
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit

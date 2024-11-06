@@ -1,22 +1,23 @@
-package com.example.legends.models
+package com.example.legends.viewModels
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.legends.api.APIService
-import com.example.legends.api.Character
-import com.example.legends.api.Icon
-import com.example.legends.api.Image
+import com.example.legends.models.Character
+import com.example.legends.models.Icon
+import com.example.legends.models.Image
 import kotlinx.coroutines.launch
 
 class CharacterViewModel : ViewModel(){
 
-    private val _characters = mutableStateOf<Character>(Character(
+    private val _characters = mutableStateOf<Character>(
+        Character(
         id = "",
         image = Icon("", Image("")),
-        lore = ""))
+        lore = "")
+    )
 
 //    val characters : MutableState<Character> = _characters
 
