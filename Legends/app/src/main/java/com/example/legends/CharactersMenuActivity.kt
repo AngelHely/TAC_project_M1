@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,8 +24,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -124,7 +130,7 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
     }
     val character = vm.getCharacter(id)
     Column(modifier = modifier.background(color = DarkCharacterCardColor).fillMaxSize()) {
-        Row (modifier = Modifier.padding(20.dp)){
+        Row (modifier = Modifier.padding(20.dp), horizontalArrangement = Arrangement.Center){
             AsyncImage(
                 model = "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${character.image.image}",
                 contentDescription = null,
@@ -135,6 +141,7 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
                 Text(text = character.id.toString(), color = Color.White, fontSize = 40.sp)
                 Text(text = character.title, color = Color.White, fontSize = 20.sp)
             }
+            Spacer(modifier = Modifier.padding(horizontal = 10.dp))
         }
         Spacer(Modifier.padding(vertical = 15.dp))
         Text(text = character.lore, color = Color.White, modifier = Modifier.padding(horizontal = 20.dp))

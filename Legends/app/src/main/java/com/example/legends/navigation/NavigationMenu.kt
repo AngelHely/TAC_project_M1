@@ -155,11 +155,11 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vm
                     ViewInList(vms.value["icon"] as IconViewModel,navController, Modifier.padding(innerPadding))
                 }
                 composable(Routes.LazyVerticalGrid.choice) {
-                    ViewInLazyVerticalGrid(vms.value["icon"] as IconViewModel, navController, modifier)
+                    ViewInLazyVerticalGrid(vms.value["icon"] as IconViewModel, navController, Modifier.padding(innerPadding))
                 }
                 composable("${Routes.Details.choice}/{characterID}") {
                     val id = it.arguments?.getString("characterID")
-                    GetCharacterDetails(vms.value["character"] as CharacterViewModel,navController, modifier, id)
+                    GetCharacterDetails(vms.value["character"] as CharacterViewModel,navController,Modifier.padding(innerPadding), id)
                 }
             }
         }
