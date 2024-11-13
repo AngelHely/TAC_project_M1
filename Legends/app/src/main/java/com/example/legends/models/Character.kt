@@ -13,5 +13,7 @@ data class Character(
     @Json(name = "image")
     val image: Image,
     @Json(name = "lore")
-    val lore : String
+    val lore : String,
+    @Json(name = "title")
+    val title : String
 )

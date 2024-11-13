@@ -24,6 +24,7 @@ import com.example.legends.ui.theme.DarkNavbarColor
 import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -40,26 +41,27 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.lifecycle.ViewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.legends.CharactersMenuActivity
-import com.example.legends.MainActivity
+import com.example.legends.GetCharacterDetails
+import com.example.legends.ViewInLazyVerticalGrid
+import com.example.legends.ViewInList
 import com.example.legends.ui.theme.DarkDisabledTextColor
 import com.example.legends.ui.theme.DarkTextColor
+import com.example.legends.viewModels.CharacterViewModel
+import com.example.legends.viewModels.IconViewModel
+import okhttp3.Route
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, view: @Composable (Modifier, Any?) -> Unit) {
-
-    val charactersMenuActivityIntent = Intent(context, CharactersMenuActivity::class.java)
-    var currentRoute by remember { mutableStateOf(Routes.List.choice) }
-
+fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vms : MutableState<Map<String, ViewModel>>) {
+    val navController = rememberNavController()
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -83,9 +85,7 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
                 NavigationDrawerItem(
                     label = { Text(text = "Accueil") },
                     selected = false,
-                    onClick = { if (context !is MainActivity) {
-                        context.finish()
-                    } },
+                    onClick = { },
                     icon = { Icon(
                         imageVector = Icons.Default.Home,
                         contentDescription = "Navigation drawer : home",
@@ -99,10 +99,7 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
                 NavigationDrawerItem(
                     label = { Text(text = "Personnages") },
                     selected = false,
-                    onClick = { (context as? Activity)?.startActivity(charactersMenuActivityIntent)
-                        if (context !is MainActivity) {
-                            context.finish()
-                        }},
+                    onClick = {},
                     icon = { Icon(
                         imageVector = Icons.Default.AccountBox,
                         contentDescription = "Navigation drawer : characters",
@@ -129,22 +126,22 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            IconButton(onClick = { currentRoute = Routes.List.choice }) {
+                            IconButton(onClick = { if (navController.currentDestination?.route.toString() != Routes.List.choice) navController.navigate(Routes.List.choice) }) {
                                 Icon(
                                     imageVector = Icons.AutoMirrored.Filled.List,
                                     contentDescription = "List",
                                     tint =
-                                        if (currentRoute == Routes.List.choice) DarkTextColor
+                                        if (navController.currentDestination?.route.toString() == Routes.List.choice) DarkTextColor
                                         else DarkDisabledTextColor,
                                 )
                             }
                             Spacer(modifier = Modifier.width(175.dp))
-                            IconButton(onClick = { currentRoute = Routes.LazyVerticalGrid.choice }) {
+                            IconButton(onClick = { if (navController.currentDestination?.route.toString() != Routes.LazyVerticalGrid.choice) navController.navigate(Routes.LazyVerticalGrid.choice) }) {
                                 Icon(
                                     imageVector = Icons.Default.Menu,
                                     contentDescription = "Column",
                                     tint =
-                                        if (currentRoute == Routes.LazyVerticalGrid.choice) DarkTextColor
+                                        if (navController.currentDestination?.route.toString() == Routes.LazyVerticalGrid.choice) DarkTextColor
                                         else DarkDisabledTextColor,
                                 )
                             }
@@ -153,7 +150,18 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vi
                 })
             }
         ) { innerPadding ->
-            view(Modifier.padding(innerPadding).fillMaxWidth(), currentRoute)
+            NavHost(navController, startDestination = Routes.List.choice) {
+                composable(Routes.List.choice) {
+                    ViewInList(vms.value["icon"] as IconViewModel,navController, Modifier.padding(innerPadding))
+                }
+                composable(Routes.LazyVerticalGrid.choice) {
+                    ViewInLazyVerticalGrid(vms.value["icon"] as IconViewModel, navController, modifier)
+                }
+                composable("${Routes.Details.choice}/{characterID}") {
+                    val id = it.arguments?.getString("characterID")
+                    GetCharacterDetails(vms.value["character"] as CharacterViewModel,navController, modifier, id)
+                }
+            }
         }
     }
 }

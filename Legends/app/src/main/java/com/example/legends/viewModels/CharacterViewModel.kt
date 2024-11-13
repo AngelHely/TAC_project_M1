@@ -17,7 +17,8 @@ class CharacterViewModel : ViewModel(){
         Character(
         id = "",
         image = Image(image = ""),
-        lore = ""
+        lore = "",
+            title = ""
         )
     )
 
