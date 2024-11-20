@@ -2,12 +2,13 @@ package com.example.legends.useCase
 
 import com.example.legends.api.APIService
 import com.example.legends.models.CharacterRes
+import com.example.legends.repository.CharacterRepository
 
 class CharacterUseCase {
 
-    suspend fun getCharacterUseCase(id : String?): CharacterRes {
+    private val characterRepository = CharacterRepository()
 
-        val apiService = APIService.retrofitService
-        return apiService.getCharacter(id)
+    suspend fun getCharacterUseCase(id : String?): CharacterRes {
+        return characterRepository.getCharacterRepository(id)
     }
 }
