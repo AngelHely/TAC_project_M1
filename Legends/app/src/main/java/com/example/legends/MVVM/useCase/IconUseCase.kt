@@ -1,8 +1,7 @@
-package com.example.legends.useCase
+package com.example.legends.MVVM.useCase
 
-import com.example.legends.api.APIService
-import com.example.legends.models.IconsList
-import com.example.legends.repository.IconRepository
+import com.example.legends.api.models.IconsList
+import com.example.legends.MVVM.repository.IconRepository
 
 class IconUseCase {
 

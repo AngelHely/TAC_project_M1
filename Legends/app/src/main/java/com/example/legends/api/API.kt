@@ -1,7 +1,10 @@
 package com.example.legends.api
 
-import com.example.legends.models.CharacterRes
-import com.example.legends.models.IconsList
+import android.content.Context
+import androidx.room.Room
+import com.example.legends.room.database.CharacterDataBase
+import com.example.legends.api.models.CharacterRes
+import com.example.legends.api.models.IconsList
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import retrofit2.Retrofit
@@ -31,4 +34,19 @@ object APIService{
     val retrofitService : APICharacter by lazy {
         retrofit.create(APICharacter::class.
         java) }
+}
+
+object BBD {
+    @Volatile
+    private var instance: CharacterDataBase? = null
+    fun getDatabase(context: Context): CharacterDataBase {
+        return instance ?: synchronized(this) {
+            instance ?: Room.databaseBuilder(
+                context.applicationContext,
+                CharacterDataBase::class.java,
+                "Legend"
+            )
+                .build()
+        }
+    }
 }

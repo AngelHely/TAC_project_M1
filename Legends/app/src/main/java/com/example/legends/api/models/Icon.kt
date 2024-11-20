@@ -1,4 +1,4 @@
-package com.example.legends.models
+package com.example.legends.api.models
 
 import com.squareup.moshi.Json
 

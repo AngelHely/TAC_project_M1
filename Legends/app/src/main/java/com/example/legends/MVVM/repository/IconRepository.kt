@@ -1,13 +1,14 @@
-package com.example.legends.repository
+package com.example.legends.MVVM.repository
 
 import com.example.legends.api.APIService
-import com.example.legends.models.IconsList
+import com.example.legends.api.models.IconsList
 
 class IconRepository {
 
+    private val apiService = APIService.retrofitService
+
 
     suspend fun getIconRepository(): IconsList {
-        val apiService = APIService.retrofitService
         return apiService.getIcons()
     }
 

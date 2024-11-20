@@ -1,17 +1,12 @@
-package com.example.legends.viewModels
+package com.example.legends.MVVM.viewModels
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.legends.api.APIService
-import com.example.legends.models.Character
-import com.example.legends.models.CharacterRes
-import com.example.legends.models.Icon
-import com.example.legends.models.Image
-import com.example.legends.useCase.CharacterUseCase
+import com.example.legends.api.models.Character
+import com.example.legends.api.models.Image
+import com.example.legends.MVVM.useCase.CharacterUseCase
 import kotlinx.coroutines.launch
 
 class CharacterViewModel : ViewModel(){
