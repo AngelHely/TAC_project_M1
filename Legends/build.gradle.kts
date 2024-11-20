@@ -2,4 +2,8 @@
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
+    //ksp
+    id("com.google.devtools.ksp") version "1.9.0-1.0.12" apply false
+    //room
+    id("androidx.room") version "2.6.1" apply false
 }

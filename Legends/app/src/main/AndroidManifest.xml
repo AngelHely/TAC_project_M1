@@ -17,7 +17,7 @@
         <activity
             android:name=".CharactersMenuActivity"
             android:exported="true"
-            android:label="@string/title_activity_character"
+            android:label="Legends"
             android:theme="@style/Theme.Legends">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

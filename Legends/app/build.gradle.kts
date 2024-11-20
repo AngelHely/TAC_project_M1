@@ -1,9 +1,14 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    //ksp
+    id("com.google.devtools.ksp")
+    // Room
+    id("androidx.room")
 }
 
 android {
+    compileSdk = 35
     namespace = "com.example.legends"
     compileSdk = 34
 
@@ -47,6 +52,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
+
 }
 
 dependencies {
@@ -84,4 +94,15 @@ dependencies {
     // Coil
     implementation (libs.coil)
     implementation (libs.coil.compose)
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+
 }
