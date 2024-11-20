@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.legends.api.APIService
 import com.example.legends.models.Icon
+import com.example.legends.useCase.IconUseCase
 import kotlinx.coroutines.launch
 
 class IconViewModel : ViewModel(){
@@ -23,9 +24,9 @@ class IconViewModel : ViewModel(){
 
     private fun getIcons() {
         viewModelScope.launch {
-            val apiService = APIService.retrofitIconService
+            val iconsUseCase = IconUseCase()
             try {
-                val response = apiService.getIcons()
+                val response = iconsUseCase.getIconUseCase()
 
                 _icons.value = response.data.values.toList()
                 size = _icons.value.size
