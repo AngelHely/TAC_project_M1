@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.legends.api.models.Character
+import com.example.legends.api.models.Icon
 import com.example.legends.api.models.Image
 import com.example.legends.mvvm.useCase.CharacterUseCase
+import com.example.legends.room.database.CharacterEntity
 import kotlinx.coroutines.launch
 
 class CharacterViewModel(private val useCase: CharacterUseCase) : ViewModel(){
@@ -21,6 +24,8 @@ class CharacterViewModel(private val useCase: CharacterUseCase) : ViewModel(){
         )
     )
 
+    private var favorites = mutableMapOf<String, Icon>()
+
 
 
     fun getCharacter(champID : String?): Character {
@@ -33,6 +38,32 @@ class CharacterViewModel(private val useCase: CharacterUseCase) : ViewModel(){
         }
         return _character.value
     }
+
+    fun getFavorites(): MutableMap<String, Icon> {
+        return this.favorites
+    }
+
+    private fun refresh() {
+        viewModelScope.launch {
+            favorites = useCase.getAllCharactersUseCase().toSortedMap()
+        }
+
+    }
+
+    fun addCharacter(name : String) {
+        viewModelScope.launch {
+            useCase.addCharacterUseCase(name)
+        }
+        this.refresh()
+    }
+
+    fun removeCharacter(id : String) {
+        viewModelScope.launch {
+            useCase.removeCharacterUseCase(id)
+        }
+        this.refresh()
+    }
+
 }
 
 

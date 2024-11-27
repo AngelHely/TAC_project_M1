@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.legends.api.models.Icon
 import com.example.legends.mvvm.useCase.IconUseCase
+import com.example.legends.room.database.CharacterEntity
 import kotlinx.coroutines.launch
 
 class IconViewModel(private val useCase: IconUseCase) : ViewModel(){
@@ -16,10 +17,13 @@ class IconViewModel(private val useCase: IconUseCase) : ViewModel(){
 
     val icons : MutableState<List<Icon>> = _icons
 
+    private var favorites = mutableMapOf<String, Icon>()
+
     var size : Int = 0
 
     init {
         getIcons()
+        refresh()
     }
 
     private fun getIcons() {
@@ -33,6 +37,17 @@ class IconViewModel(private val useCase: IconUseCase) : ViewModel(){
                     Log.d("ICON", "error : ${e.message.toString()}")
             }
         }
+    }
+
+    fun getFavorites(): MutableMap<String, Icon> {
+        return this.favorites
+    }
+
+    private fun refresh() {
+        viewModelScope.launch {
+            favorites = useCase.getAllCharactersUseCase().toSortedMap()
+        }
+
     }
 
 }

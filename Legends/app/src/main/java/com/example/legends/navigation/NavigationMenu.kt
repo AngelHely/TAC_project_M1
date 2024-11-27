@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
@@ -51,7 +52,6 @@ import com.example.legends.mvvm.viewModels.IconViewModelFactory
 @Composable
 fun NavigationMenu(
     modifier: Modifier = Modifier,
-    context: ComponentActivity,
     app: LegendApplication
 ) {
     val navController = rememberNavController()
@@ -128,7 +128,7 @@ fun NavigationMenu(
                                         else DarkDisabledTextColor,
                                 )
                             }
-                            Spacer(modifier = Modifier.width(175.dp))
+                            Spacer(modifier = Modifier.width(75.dp))
                             IconButton(onClick = { if (navController.currentDestination?.route.toString() != Routes.LazyVerticalGrid.choice) navController.navigate(Routes.LazyVerticalGrid.choice) }) {
                                 Icon(
                                     imageVector = Icons.Default.Menu,
@@ -137,6 +137,17 @@ fun NavigationMenu(
                                         if (navController.currentDestination?.route.toString() == Routes.LazyVerticalGrid.choice) DarkTextColor
                                         else DarkDisabledTextColor,
                                 )
+                            }
+                            Spacer(modifier = Modifier.width(75.dp))
+                            IconButton(onClick = {
+                                app.favoriteMode = !app.favoriteMode
+                                navController.navigate(navController.currentDestination?.route.toString())
+                            }) {
+                                Icon(imageVector =  Icons.Default.Star,
+                                    contentDescription = "Column",
+                                    tint =
+                                    if (navController.currentDestination?.route.toString() == Routes.LazyVerticalGrid.choice) DarkTextColor
+                                    else DarkDisabledTextColor,)
                             }
                         }
 
@@ -148,7 +159,7 @@ fun NavigationMenu(
                     ViewInList(viewModel(factory = IconViewModelFactory(app.iconUseCase)),navController, Modifier.padding(innerPadding))
                 }
                 composable(Routes.LazyVerticalGrid.choice) {
-                    ViewInLazyVerticalGrid(viewModel(factory = IconViewModelFactory(app.iconUseCase)), navController, Modifier.padding(innerPadding))
+                    ViewInLazyVerticalGrid(viewModel(factory = IconViewModelFactory(app.iconUseCase)), navController, Modifier.padding(innerPadding), app.favoriteMode)
                 }
                 composable("${Routes.Details.choice}/{characterID}") {
                     val id = it.arguments?.getString("characterID")

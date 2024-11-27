@@ -10,6 +10,7 @@ import com.example.legends.room.database.CharacterDataBase
 
 class LegendApplication() : Application() {
 
+    var favoriteMode: Boolean = false
     private lateinit var  context : CharactersMenuActivity
 
     fun setContext(context : CharactersMenuActivity) {
@@ -37,7 +38,7 @@ class LegendApplication() : Application() {
     // ICON part
 
     private val iconRepository : IconRepository by lazy {
-        IconRepository()
+        IconRepository(dao)
     }
 
     val iconUseCase : IconUseCase by lazy {

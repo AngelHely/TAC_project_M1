@@ -1,7 +1,6 @@
 package com.example.legends
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -25,8 +24,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,7 +60,7 @@ class CharactersMenuActivity : ComponentActivity() {
         setContent {
             LegendsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavigationMenu(modifier = Modifier.padding(innerPadding), context = this, app)
+                    NavigationMenu(modifier = Modifier.padding(innerPadding), app)
                 }
             }
         }
@@ -67,21 +71,26 @@ class CharactersMenuActivity : ComponentActivity() {
 fun ViewInLazyVerticalGrid(
     vm: IconViewModel,
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    favoriteMode : Boolean
 ) {
     BackHandler {
         navController.popBackStack()
     }
     LazyVerticalGrid (columns = GridCells.Fixed(2),modifier = modifier.background(color = DarkBackgroundColor)) {
-        Log.d("SIZE", "${vm.size}")
-        items(vm.icons.value) {
+        val charactersList = getIconsList(vm, favoriteMode)
+        items(charactersList) {
                 icon -> CharacterCard(icon, navController)
         }
     }
 }
 
 @Composable
-fun ViewInList(vm: IconViewModel, navController: NavHostController, modifier: Modifier) {
+fun ViewInList(
+    vm: IconViewModel,
+    navController: NavHostController,
+    modifier: Modifier
+) {
     BackHandler {
         navController.popBackStack()
     }
@@ -106,7 +115,7 @@ fun CharacterCard(icon : Icon, navController: NavHostController) {
         content = {
             Column(Modifier.padding(16.dp)) {
                 AsyncImage(
-                    model= "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${icon.image.image}" ,
+                    model= "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${icon.id}.png" ,
                     null,
                     modifier = Modifier.fillMaxHeight()
                 )
@@ -133,9 +142,23 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
                 Text(text = character.id.toString(), color = Color.White, fontSize = 40.sp)
                 Text(text = character.title, color = Color.White, fontSize = 20.sp)
             }
-            Spacer(modifier = Modifier.padding(horizontal = 10.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 50.dp))
+            character.id?.let { FavoriteButton(vm, it) }
         }
         Spacer(Modifier.padding(vertical = 15.dp))
         Text(text = character.lore, color = Color.White, modifier = Modifier.padding(horizontal = 20.dp))
     }
 }
+
+fun getIconsList(vm : IconViewModel, isFavorites : Boolean): List<Icon> {
+    return if (isFavorites) {
+        vm.getFavorites().values.toList()
+    }
+    else {
+        vm.icons.value
+    }
+}
+
+
+
+
