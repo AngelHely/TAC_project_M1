@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,12 +23,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.legends.api.models.Icon
-import com.example.legends.MVVM.viewModels.CharacterViewModel
-import com.example.legends.MVVM.viewModels.IconViewModel
+import com.example.legends.mvvm.viewModels.CharacterViewModel
+import com.example.legends.mvvm.viewModels.IconViewModel
 import com.example.legends.navigation.NavigationMenu
 import com.example.legends.ui.theme.DarkBackgroundColor
 import com.example.legends.ui.theme.DarkCharacterCardColor
@@ -46,19 +46,17 @@ import com.example.legends.ui.theme.LegendsTheme
 
 class CharactersMenuActivity : ComponentActivity() {
 
-    private val iconViewModel : IconViewModel by viewModels()
-    private val characterViewModel : CharacterViewModel by viewModels()
+    private lateinit var app : LegendApplication
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val viewModels = mutableStateOf(mapOf(
-            "icon" to iconViewModel, "character" to characterViewModel
-        ))
+        app = LegendApplication()
+        app.setContext(this)
         setContent {
             LegendsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavigationMenu(modifier = Modifier.padding(innerPadding), context = this, vms = viewModels)
+                    NavigationMenu(modifier = Modifier.padding(innerPadding), context = this, app)
                 }
             }
         }
@@ -123,7 +121,7 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
         navController.popBackStack()
     }
     val character = vm.getCharacter(id)
-    Column(modifier = modifier.background(color = DarkCharacterCardColor).fillMaxSize()) {
+    Column(modifier = modifier.background(color = DarkCharacterCardColor).fillMaxSize().verticalScroll(rememberScrollState())) {
         Row (modifier = Modifier.padding(20.dp), horizontalArrangement = Arrangement.Center){
             AsyncImage(
                 model = "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${character.image.image}",

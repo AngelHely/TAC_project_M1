@@ -32,24 +32,28 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.IconButton
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.legends.GetCharacterDetails
+import com.example.legends.LegendApplication
 import com.example.legends.ViewInLazyVerticalGrid
 import com.example.legends.ViewInList
 import com.example.legends.ui.theme.DarkDisabledTextColor
 import com.example.legends.ui.theme.DarkTextColor
-import com.example.legends.MVVM.viewModels.CharacterViewModel
-import com.example.legends.MVVM.viewModels.IconViewModel
+import com.example.legends.mvvm.viewModels.CharacterViewModelFactory
+import com.example.legends.mvvm.viewModels.IconViewModelFactory
 
 
 @Composable
-fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vms : MutableState<Map<String, ViewModel>>) {
+fun NavigationMenu(
+    modifier: Modifier = Modifier,
+    context: ComponentActivity,
+    app: LegendApplication
+) {
     val navController = rememberNavController()
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -141,14 +145,14 @@ fun NavigationMenu(modifier: Modifier = Modifier, context: ComponentActivity, vm
         ) { innerPadding ->
             NavHost(navController, startDestination = Routes.List.choice) {
                 composable(Routes.List.choice) {
-                    ViewInList(vms.value["icon"] as IconViewModel,navController, Modifier.padding(innerPadding))
+                    ViewInList(viewModel(factory = IconViewModelFactory(app.iconUseCase)),navController, Modifier.padding(innerPadding))
                 }
                 composable(Routes.LazyVerticalGrid.choice) {
-                    ViewInLazyVerticalGrid(vms.value["icon"] as IconViewModel, navController, Modifier.padding(innerPadding))
+                    ViewInLazyVerticalGrid(viewModel(factory = IconViewModelFactory(app.iconUseCase)), navController, Modifier.padding(innerPadding))
                 }
                 composable("${Routes.Details.choice}/{characterID}") {
                     val id = it.arguments?.getString("characterID")
-                    GetCharacterDetails(vms.value["character"] as CharacterViewModel,navController,Modifier.padding(innerPadding), id)
+                    GetCharacterDetails(viewModel(factory =  CharacterViewModelFactory(app.characterUseCase)),navController,Modifier.padding(innerPadding), id)
                 }
             }
         }

@@ -1,15 +1,16 @@
-package com.example.legends.MVVM.viewModels
+package com.example.legends.mvvm.viewModels
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.legends.api.models.Icon
-import com.example.legends.MVVM.useCase.IconUseCase
+import com.example.legends.mvvm.useCase.IconUseCase
 import kotlinx.coroutines.launch
 
-class IconViewModel : ViewModel(){
+class IconViewModel(private val useCase: IconUseCase) : ViewModel(){
 
     private val _icons = mutableStateOf<List<Icon>>(listOf())
 
@@ -23,9 +24,8 @@ class IconViewModel : ViewModel(){
 
     private fun getIcons() {
         viewModelScope.launch {
-            val iconsUseCase = IconUseCase()
             try {
-                val response = iconsUseCase.getIconUseCase()
+                val response = useCase.getIconUseCase()
 
                 _icons.value = response.data.values.toList()
                 size = _icons.value.size
@@ -35,4 +35,15 @@ class IconViewModel : ViewModel(){
         }
     }
 
+}
+
+class IconViewModelFactory(private val useCase: IconUseCase) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(IconViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return IconViewModel(useCase) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

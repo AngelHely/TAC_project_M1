@@ -1,4 +1,4 @@
-package com.example.legends.MVVM.repository
+package com.example.legends.mvvm.repository
 
 import com.example.legends.api.APIService
 import com.example.legends.api.models.IconsList

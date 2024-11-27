@@ -1,10 +1,10 @@
-package com.example.legends.MVVM.repository
+package com.example.legends.mvvm.repository
 
 import com.example.legends.api.APIService
 import com.example.legends.api.models.CharacterRes
 import com.example.legends.room.dao.CharacterDao
 
-class  CharacterRepository {
+class  CharacterRepository(private val dao : CharacterDao) {
 
     private val apiService = APIService.retrofitService
 
@@ -12,7 +12,7 @@ class  CharacterRepository {
         return apiService.getCharacter(id)
     }
 
-    fun getAllCharacters() =
+//    fun getAllCharacters() =
 
 
 }

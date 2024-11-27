@@ -35,18 +35,3 @@ object APIService{
         retrofit.create(APICharacter::class.
         java) }
 }
-
-object BBD {
-    @Volatile
-    private var instance: CharacterDataBase? = null
-    fun getDatabase(context: Context): CharacterDataBase {
-        return instance ?: synchronized(this) {
-            instance ?: Room.databaseBuilder(
-                context.applicationContext,
-                CharacterDataBase::class.java,
-                "Legend"
-            )
-                .build()
-        }
-    }
-}
