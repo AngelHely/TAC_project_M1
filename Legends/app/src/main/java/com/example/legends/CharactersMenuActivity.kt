@@ -1,6 +1,8 @@
 package com.example.legends
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -34,8 +36,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -72,13 +77,12 @@ fun ViewInLazyVerticalGrid(
     vm: IconViewModel,
     navController: NavHostController,
     modifier: Modifier,
-    favoriteMode : Boolean
 ) {
     BackHandler {
         navController.popBackStack()
     }
     LazyVerticalGrid (columns = GridCells.Fixed(2),modifier = modifier.background(color = DarkBackgroundColor)) {
-        val charactersList = getIconsList(vm, favoriteMode)
+        val charactersList = getIconsList(vm)
         items(charactersList) {
                 icon -> CharacterCard(icon, navController)
         }
@@ -89,13 +93,14 @@ fun ViewInLazyVerticalGrid(
 fun ViewInList(
     vm: IconViewModel,
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
 ) {
     BackHandler {
         navController.popBackStack()
     }
     LazyColumn(modifier = modifier.background(color = DarkBackgroundColor)) {
-        items(vm.icons.value) {
+        val charactersList = getIconsList(vm)
+        items(charactersList) {
                 icon -> CharacterCard(icon, navController)
         }
     }
@@ -123,7 +128,6 @@ fun CharacterCard(icon : Icon, navController: NavHostController) {
         }
     )
 }
-
 @Composable
 fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostController, modifier: Modifier, id : String?) {
     BackHandler {
@@ -138,11 +142,11 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
                 modifier = Modifier.size(125.dp)
             )
             Spacer(modifier = Modifier.padding(horizontal = 10.dp))
-            Column {
+            Column(){
                 Text(text = character.id.toString(), color = Color.White, fontSize = 40.sp)
                 Text(text = character.title, color = Color.White, fontSize = 20.sp)
             }
-            Spacer(modifier = Modifier.padding(horizontal = 50.dp))
+            Spacer(modifier = Modifier.padding(horizontal = 10.dp))
             character.id?.let { FavoriteButton(vm, it) }
         }
         Spacer(Modifier.padding(vertical = 15.dp))
@@ -150,14 +154,15 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
     }
 }
 
-fun getIconsList(vm : IconViewModel, isFavorites : Boolean): List<Icon> {
-    return if (isFavorites) {
-        vm.getFavorites().values.toList()
+fun getIconsList(vm : IconViewModel): List<Icon> {
+    return if (vm.getFavoriteMode()) {
+        vm.getFavorites()
     }
     else {
         vm.icons.value
     }
 }
+
 
 
 

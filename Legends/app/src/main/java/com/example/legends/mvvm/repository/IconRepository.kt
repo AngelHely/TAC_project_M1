@@ -13,6 +13,11 @@ class IconRepository(private val dao: CharacterDao) {
         return apiService.getIcons()
     }
 
+    suspend fun exists(id : String): Boolean {
+        return dao.exists(id)
+    }
+
     suspend fun getAllCharacters() = dao.getAllCharacters()
+
 
 }

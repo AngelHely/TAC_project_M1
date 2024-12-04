@@ -4,7 +4,6 @@ import com.example.legends.api.APIService
 import com.example.legends.api.models.CharacterRes
 import com.example.legends.api.models.Icon
 import com.example.legends.room.dao.CharacterDao
-import com.example.legends.room.database.CharacterEntity
 
 class  CharacterRepository(private val dao : CharacterDao) {
 
@@ -14,7 +13,9 @@ class  CharacterRepository(private val dao : CharacterDao) {
         return apiService.getCharacter(id)
     }
 
-    suspend fun getAllCharacters() = dao.getAllCharacters()
+    suspend fun exists(id : String): Boolean {
+        return dao.exists(id)
+    }
 
     suspend fun addCharacter(name : String) {
         val c = Icon(id = name)
