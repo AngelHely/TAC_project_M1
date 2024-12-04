@@ -35,7 +35,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,6 +46,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.example.legends.api.models.Icon
 import com.example.legends.mvvm.viewModels.CharacterViewModel
@@ -78,6 +81,7 @@ fun ViewInLazyVerticalGrid(
     navController: NavHostController,
     modifier: Modifier,
 ) {
+    Log.d("ROUTE", navController.currentBackStackEntry.toString())
     BackHandler {
         navController.popBackStack()
     }
@@ -113,7 +117,9 @@ fun CharacterCard(icon : Icon, navController: NavHostController) {
             .fillMaxWidth()
             .height(120.dp)
             .padding(8.dp)
-            .clickable { navController.navigate("Details/${icon.id}") },
+            .clickable {
+                navController.navigate("Details/${icon.id}")
+                       },
         colors = CardDefaults.cardColors(
             containerColor = DarkCharacterCardColor
         ),
@@ -129,10 +135,11 @@ fun CharacterCard(icon : Icon, navController: NavHostController) {
     )
 }
 @Composable
-fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostController, modifier: Modifier, id : String?) {
+fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostController, modifier: Modifier, id : String) {
     BackHandler {
         navController.popBackStack()
     }
+
     val character = vm.getCharacter(id)
     Column(modifier = modifier.background(color = DarkCharacterCardColor).fillMaxSize().verticalScroll(rememberScrollState())) {
         Row (modifier = Modifier.padding(20.dp), horizontalArrangement = Arrangement.Center){
@@ -145,9 +152,8 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
             Column(){
                 Text(text = character.id.toString(), color = Color.White, fontSize = 40.sp)
                 Text(text = character.title, color = Color.White, fontSize = 20.sp)
+                FavoriteButton(vm, id)
             }
-            Spacer(modifier = Modifier.padding(horizontal = 10.dp))
-            character.id?.let { FavoriteButton(vm, it) }
         }
         Spacer(Modifier.padding(vertical = 15.dp))
         Text(text = character.lore, color = Color.White, modifier = Modifier.padding(horizontal = 20.dp))

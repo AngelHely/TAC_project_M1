@@ -33,11 +33,15 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.legends.GetCharacterDetails
 import com.example.legends.LegendApplication
@@ -48,6 +52,7 @@ import com.example.legends.ui.theme.DarkTextColor
 import com.example.legends.mvvm.viewModels.CharacterViewModelFactory
 import com.example.legends.mvvm.viewModels.IconViewModel
 import com.example.legends.mvvm.viewModels.IconViewModelFactory
+import okhttp3.Route
 
 
 @Composable
@@ -55,7 +60,13 @@ fun NavigationMenu(
     modifier: Modifier = Modifier,
     app: LegendApplication
 ) {
+
+    // NavController management
     val navController = rememberNavController()
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStackEntry?.destination?.route
+
+
     val configuration = LocalConfiguration.current
     val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -108,58 +119,17 @@ fun NavigationMenu(
     ) {
         Scaffold(
             topBar = {
-                TopNavbar(drawerState = drawerState)
+                if (currentDestination != null && currentDestination.startsWith(Routes.Details.choice)) {
+                    TopDetailBar(navController)
+                }
+                else {
+                    TopNavbar(drawerState = drawerState)
+                }
             },
             bottomBar = {
-                BottomAppBar(
-                    modifier = Modifier.height(if (isLandscape) 60.dp else 105.dp),
-                    containerColor = DarkNavbarColor,
-                    actions = {
-
-                        Row (
-                            modifier = Modifier
-                                .fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            IconButton(onClick = { if (navController.currentDestination?.route.toString() != Routes.List.choice)
-                                navController.navigate(Routes.List.choice)
-                            })
-                            {
-                                Icon(
-                                    imageVector = Icons.AutoMirrored.Filled.List,
-                                    contentDescription = "List",
-                                    tint =
-                                        if (navController.currentDestination?.route.toString() == Routes.List.choice) DarkTextColor
-                                        else DarkDisabledTextColor,
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(75.dp))
-                            IconButton(onClick = { if (navController.currentDestination?.route.toString() != Routes.LazyVerticalGrid.choice)
-                                navController.navigate(Routes.LazyVerticalGrid.choice)
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Default.Menu,
-                                    contentDescription = "Column",
-                                    tint =
-                                        if (navController.currentDestination?.route.toString() == Routes.LazyVerticalGrid.choice) DarkTextColor
-                                        else DarkDisabledTextColor,
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(75.dp))
-                            IconButton(onClick = {
-                                iconVM.toggleFavoriteMode()
-                                navController.navigate(navController.currentDestination?.route.toString())
-                            }) {
-                                Icon(imageVector =  Icons.Default.Star,
-                                    contentDescription = "Column",
-                                    tint =
-                                    if (iconVM.getFavoriteMode()) Color.Yellow
-                                    else Color.White)
-                            }
-                        }
-
-                })
+                if (currentDestination != null && !currentDestination.startsWith(Routes.Details.choice)) {
+                    BottomNavBar(isLandscape, navController, iconVM)
+                }
             }
         ) { innerPadding ->
             NavHost(navController, startDestination = Routes.List.choice) {
@@ -170,10 +140,12 @@ fun NavigationMenu(
                     ViewInLazyVerticalGrid(iconVM, navController, Modifier.padding(innerPadding))
                 }
                 composable("${Routes.Details.choice}/{characterID}") {
-                    val id = it.arguments?.getString("characterID")
+                    val id = it.arguments?.getString("characterID")?:throw Error("error id details")
                     GetCharacterDetails(viewModel(factory =  CharacterViewModelFactory(app.characterUseCase)),navController,Modifier.padding(innerPadding), id)
                 }
             }
         }
     }
 }
+
+
