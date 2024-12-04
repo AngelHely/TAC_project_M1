@@ -81,7 +81,6 @@ fun ViewInLazyVerticalGrid(
     navController: NavHostController,
     modifier: Modifier,
 ) {
-    Log.d("ROUTE", navController.currentBackStackEntry.toString())
     BackHandler {
         navController.popBackStack()
     }
@@ -124,12 +123,16 @@ fun CharacterCard(icon : Icon, navController: NavHostController) {
             containerColor = DarkCharacterCardColor
         ),
         content = {
-            Column(Modifier.padding(16.dp)) {
+            Row (Modifier.padding(16.dp)) {
                 AsyncImage(
                     model= "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${icon.id}.png" ,
                     null,
                     modifier = Modifier.fillMaxHeight()
                 )
+                Column(Modifier.padding(horizontal = 5.dp).fillMaxWidth()) {
+                    Text(icon.id)
+                    Text(icon.title)
+                }
             }
         }
     )
@@ -150,9 +153,9 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
             )
             Spacer(modifier = Modifier.padding(horizontal = 10.dp))
             Column(){
-                Text(text = character.id.toString(), color = Color.White, fontSize = 40.sp)
+                Text(text = character.id, color = Color.White, fontSize = 40.sp)
                 Text(text = character.title, color = Color.White, fontSize = 20.sp)
-                FavoriteButton(vm, id)
+                FavoriteButton(vm, character)
             }
         }
         Spacer(Modifier.padding(vertical = 15.dp))

@@ -1,5 +1,6 @@
 package com.example.legends.mvvm.useCase
 
+import com.example.legends.api.models.Character
 import com.example.legends.api.models.CharacterRes
 import com.example.legends.mvvm.repository.CharacterRepository
 
@@ -13,8 +14,8 @@ class CharacterUseCase(private val repository : CharacterRepository) {
         return repository.exists(id)
     }
 
-    suspend fun addCharacterUseCase(name : String) {
-        repository.addCharacter(name)
+    suspend fun addCharacterUseCase(character: Character) {
+        repository.addCharacter(character)
     }
 
     suspend fun removeCharacterUseCase(id : String) {

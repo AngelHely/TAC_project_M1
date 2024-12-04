@@ -1,6 +1,7 @@
 package com.example.legends.mvvm.repository
 
 import com.example.legends.api.APIService
+import com.example.legends.api.models.Character
 import com.example.legends.api.models.CharacterRes
 import com.example.legends.api.models.Icon
 import com.example.legends.room.dao.CharacterDao
@@ -17,8 +18,8 @@ class  CharacterRepository(private val dao : CharacterDao) {
         return dao.exists(id)
     }
 
-    suspend fun addCharacter(name : String) {
-        val c = Icon(id = name)
+    suspend fun addCharacter(character: Character) {
+        val c = Icon(id = character.id, title = character.title)
         dao.addCharacter(c)
     }
 

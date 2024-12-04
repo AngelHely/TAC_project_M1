@@ -1,10 +1,8 @@
 package com.example.legends.mvvm.viewModels
 
-import android.text.BoringLayout
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -45,15 +43,12 @@ class IconViewModel(private val useCase: IconUseCase) : ViewModel(){
     }
 
     fun getFavorites(): MutableList<Icon> {
+        this.refresh()
         return this.favorites
     }
 
     fun getFavoriteMode() : Boolean {
         return this.favoriteMode.value
-    }
-
-    suspend fun exists(id : String): Boolean {
-        return useCase.exists(id)
     }
 
     private fun refresh() {

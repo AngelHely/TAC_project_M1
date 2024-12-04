@@ -9,7 +9,7 @@ data class CharacterRes (
 
 data class Character(
     @Json(name = "id")
-    val id : String?,
+    val id : String,
     @Json(name = "image")
     val image: Image,
     @Json(name = "lore")

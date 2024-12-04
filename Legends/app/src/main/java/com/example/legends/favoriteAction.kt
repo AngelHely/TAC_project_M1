@@ -12,32 +12,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import com.example.legends.api.models.Character
 import com.example.legends.mvvm.viewModels.CharacterViewModel
 
 @Composable
-fun FavoriteButton(vm : CharacterViewModel, name : String) {
-    var isFavorite by remember { mutableStateOf(false)  }
+fun FavoriteButton(vm : CharacterViewModel, character : Character) {
+    val name = character.id
     LaunchedEffect(Unit) {
-        isFavorite = vm.exists(name)
-        Log.d("FAV", vm.exists(name).toString())
+        vm.exists(name)
     }
     IconButton(onClick = {
-        action(vm, name, isFavorite)
+        action(vm, character)
     })
     {
         Icon(
             imageVector = Icons.Default.Star,
             contentDescription = "add Character",
-            tint = if (isFavorite) Color.Yellow else Color.White
+            tint = if (vm.isFavorite()) Color.Yellow else Color.White
         )
     }
 }
 
-fun action(vm : CharacterViewModel, name : String, isFavorite : Boolean) {
-    if (isFavorite) {
-        vm.removeCharacter(name)
+fun action(vm : CharacterViewModel, character : Character) {
+    if (vm.isFavorite()) {
+        vm.removeCharacter(character.id)
     }
     else {
-        vm.addCharacter(name)
+        vm.addCharacter(character)
     }
 }

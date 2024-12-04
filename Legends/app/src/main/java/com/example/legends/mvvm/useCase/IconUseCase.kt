@@ -9,10 +9,6 @@ class IconUseCase(private val repository: IconRepository){
         return repository.getIconRepository()
     }
 
-    suspend fun exists(id : String): Boolean {
-        return repository.exists(id)
-    }
-
     suspend fun getAllCharactersUseCase() = repository.getAllCharacters()
 
 }

@@ -1,6 +1,7 @@
 package com.example.legends.mvvm.viewModels
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class CharacterViewModel(private val useCase: CharacterUseCase) : ViewModel(){
 
-    private val _character = mutableStateOf<Character>(
+    private val _character = mutableStateOf(
         Character(
             id = "",
             image = Image(image = ""),
@@ -22,12 +23,15 @@ class CharacterViewModel(private val useCase: CharacterUseCase) : ViewModel(){
         )
     )
 
+    private var isFavorite = mutableStateOf(false)
+
 
 
     fun getCharacter(champID : String?): Character {
         viewModelScope.launch {
             try {
                 _character.value = useCase.getCharacterUseCase(champID).data[champID]!!
+                isFavorite.value = useCase.exists(_character.value.id)
             } catch (e: Exception) {
                 Log.d("CHARACTER", "error : ${e.message.toString()}")
             }
@@ -35,22 +39,34 @@ class CharacterViewModel(private val useCase: CharacterUseCase) : ViewModel(){
         return _character.value
     }
 
-    suspend fun exists(id : String): Boolean {
-        Log.d("FAV", useCase.exists(id).toString())
-        return useCase.exists(id)
+    fun isFavorite(): Boolean {
+        return this.isFavorite.value
     }
 
-    fun addCharacter(name : String) {
+     suspend fun exists(id : String) {
+         viewModelScope.launch {
+             isFavorite.value = useCase.exists(id)
+         }
+    }
+
+    fun addCharacter(character: Character) {
         viewModelScope.launch {
-            useCase.addCharacterUseCase(name)
+            useCase.addCharacterUseCase(character)
+            toggleFavorite(character.id)
         }
+
     }
 
     fun removeCharacter(id : String) {
         viewModelScope.launch {
             useCase.removeCharacterUseCase(id)
+            toggleFavorite(id)
         }
     }
+
+    private suspend fun toggleFavorite(id: String) {
+            this.isFavorite.value = useCase.exists(id)
+        }
 
 }
 

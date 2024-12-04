@@ -14,6 +14,8 @@ data class Icon(
     @Json(name = "id")
     @PrimaryKey(autoGenerate = false)
     val id : String,
+    @Json(name = "title")
+    val title : String
     )
 
 data class Image(

@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
 import com.example.legends.api.models.Icon
 import com.example.legends.room.dao.CharacterDao
 
-@Database(entities = [Icon::class], version = 2)
+@Database(entities = [Icon::class], version = 3)
 abstract class CharacterDataBase : RoomDatabase(){
     abstract fun characterDao() : CharacterDao
 
