@@ -2,7 +2,10 @@ package com.example.legends.mvvm.viewModels
 
 import android.util.Log
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,11 +16,12 @@ import kotlinx.coroutines.launch
 class IconViewModel(private val useCase: IconUseCase) : ViewModel(){
 
     private val _icons = mutableStateOf<List<Icon>>(listOf())
-
     val icons : MutableState<List<Icon>> = _icons
 
     private var favorites = mutableListOf<Icon>()
     private var favoriteMode = mutableStateOf(false)
+
+    private var textFilter = mutableStateOf("")
 
     private val isLoading: MutableState<Boolean> = mutableStateOf(false)
 
@@ -49,6 +53,14 @@ class IconViewModel(private val useCase: IconUseCase) : ViewModel(){
 
     fun getFavoriteMode() : Boolean {
         return this.favoriteMode.value
+    }
+
+    fun getTextFilter() : String {
+        return this.textFilter.value
+    }
+
+    fun setTextFilter(text : String) {
+        this.textFilter.value = text
     }
 
     private fun refresh() {

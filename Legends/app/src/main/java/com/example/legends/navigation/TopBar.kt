@@ -29,11 +29,13 @@ fun TopNavbar() {
 fun TopDetailBar(navController : NavHostController) {
     TopAppBar(
         title = {},
+        colors = topAppBarColors(containerColor = DarkNavbarColor),
         navigationIcon = {
         IconButton(onClick = {navController.popBackStack()}) {
             Icon(
                 Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Retour"
+                contentDescription = "Retour",
+                tint = Color.White
             )
         }
     })

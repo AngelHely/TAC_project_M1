@@ -1,5 +1,6 @@
 package com.example.legends
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -29,6 +30,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -47,6 +49,7 @@ class CharactersMenuActivity : ComponentActivity() {
 
     private lateinit var app : LegendApplication
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -55,7 +58,7 @@ class CharactersMenuActivity : ComponentActivity() {
         setContent {
             LegendsTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NavigationMenu(modifier = Modifier.padding(innerPadding), app)
+                    NavigationMenu(app)
                 }
             }
         }
@@ -71,10 +74,19 @@ fun ViewInLazyVerticalGrid(
     BackHandler {
         navController.popBackStack()
     }
-    LazyVerticalGrid (columns = GridCells.Fixed(2),modifier = modifier.background(color = DarkBackgroundColor)) {
-        val charactersList = getIconsList(vm)
-        items(charactersList) {
-                icon -> CharacterCard(icon, navController)
+    Column (modifier = modifier.fillMaxSize()) {
+        EditTextField(
+            vm.getTextFilter(),
+            onValueChanged = { text -> vm.setTextFilter(text) },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2)
+        ) {
+            val charactersList = getIconsList(vm)
+            items(charactersList) { icon ->
+                CharacterCard(icon, navController)
+            }
         }
     }
 }
@@ -88,10 +100,14 @@ fun ViewInList(
     BackHandler {
         navController.popBackStack()
     }
-    LazyColumn(modifier = modifier.background(color = DarkBackgroundColor)) {
-        val charactersList = getIconsList(vm)
-        items(charactersList) {
-                icon -> CharacterCard(icon, navController)
+
+    Column(modifier = modifier.fillMaxSize()) {
+        EditTextField(vm.getTextFilter(), onValueChanged = {text -> vm.setTextFilter(text)}, modifier = Modifier.align(Alignment.CenterHorizontally))
+        LazyColumn {
+            val charactersList = getIconsList(vm)
+            items(charactersList) { icon ->
+                CharacterCard(icon, navController)
+            }
         }
     }
 }
@@ -105,7 +121,7 @@ fun CharacterCard(icon : Icon, navController: NavHostController) {
             .padding(8.dp)
             .clickable {
                 navController.navigate("Details/${icon.id}")
-                       },
+            },
         colors = CardDefaults.cardColors(
             containerColor = DarkCharacterCardColor
         ),
@@ -116,9 +132,12 @@ fun CharacterCard(icon : Icon, navController: NavHostController) {
                     null,
                     modifier = Modifier.fillMaxHeight()
                 )
-                Column(Modifier.padding(horizontal = 5.dp).fillMaxWidth()) {
-                    Text(icon.id)
-                    Text(icon.title)
+                Column(
+                    Modifier
+                        .padding(horizontal = 5.dp)
+                        .fillMaxWidth()) {
+                    Text(icon.id, color = Color.White)
+                    Text(icon.title, color = Color.White)
                 }
             }
         }
@@ -131,7 +150,10 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
     }
 
     val character = vm.getCharacter(id)
-    Column(modifier = modifier.background(color = DarkCharacterCardColor).fillMaxSize().verticalScroll(rememberScrollState())) {
+    Column(modifier = modifier
+        .background(color = DarkCharacterCardColor)
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState())) {
         Row (modifier = Modifier.padding(20.dp), horizontalArrangement = Arrangement.Center){
             AsyncImage(
                 model = "https://ddragon.leagueoflegends.com/cdn/13.16.1/img/champion/${character.image.image}",
@@ -152,10 +174,10 @@ fun GetCharacterDetails(vm : CharacterViewModel, navController: NavHostControlle
 
 fun getIconsList(vm : IconViewModel): List<Icon> {
     return if (vm.getFavoriteMode()) {
-        vm.getFavorites()
+        filter(vm.getFavorites(),vm.getTextFilter())
     }
     else {
-        vm.icons.value
+        filter(vm.icons.value, vm.getTextFilter())
     }
 }
 

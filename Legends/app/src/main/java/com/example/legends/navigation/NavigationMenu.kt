@@ -1,6 +1,7 @@
 package com.example.legends.navigation
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ModalNavigationDrawer
@@ -9,6 +10,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -22,12 +24,12 @@ import com.example.legends.ViewInList
 import com.example.legends.mvvm.viewModels.CharacterViewModelFactory
 import com.example.legends.mvvm.viewModels.IconViewModel
 import com.example.legends.mvvm.viewModels.IconViewModelFactory
+import com.example.legends.ui.theme.DarkBackgroundColor
 
 
 @Composable
 fun NavigationMenu(
-    modifier: Modifier = Modifier,
-    app: LegendApplication
+    app: LegendApplication,
 ) {
 
     // NavController management
@@ -46,7 +48,7 @@ fun NavigationMenu(
         drawerState = drawerState,
         drawerContent = {},
     ) {
-        Scaffold(
+        Scaffold( containerColor = DarkBackgroundColor,
             topBar = {
                 if (currentDestination != null && currentDestination.startsWith(Routes.Details.choice)) {
                     TopDetailBar(navController)
