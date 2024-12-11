@@ -2,7 +2,7 @@ package com.example.legends.mvvm.repository
 
 import com.example.legends.api.APIService
 import com.example.legends.api.models.IconsList
-import com.example.legends.room.dao.CharacterDao
+import com.example.legends.room.CharacterDao
 
 class IconRepository(private val dao: CharacterDao) {
 

@@ -1,13 +1,11 @@
 package com.example.legends.mvvm.viewModels
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.legends.api.models.Character
-import com.example.legends.api.models.Icon
 import com.example.legends.api.models.Image
 import com.example.legends.mvvm.useCase.CharacterUseCase
 import kotlinx.coroutines.launch

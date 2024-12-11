@@ -1,12 +1,10 @@
-package com.example.legends.room.database
+package com.example.legends.room
 
 import android.content.Context
-import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.legends.api.models.Icon
-import com.example.legends.room.dao.CharacterDao
 
 @Database(entities = [Icon::class], version = 3)
 abstract class CharacterDataBase : RoomDatabase(){

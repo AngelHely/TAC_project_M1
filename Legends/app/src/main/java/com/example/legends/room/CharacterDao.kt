@@ -1,4 +1,4 @@
-package com.example.legends.room.dao
+package com.example.legends.room
 
 import androidx.room.Dao
 import androidx.room.Insert

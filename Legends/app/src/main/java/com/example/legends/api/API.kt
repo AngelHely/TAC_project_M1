@@ -1,8 +1,5 @@
 package com.example.legends.api
 
-import android.content.Context
-import androidx.room.Room
-import com.example.legends.room.database.CharacterDataBase
 import com.example.legends.api.models.CharacterRes
 import com.example.legends.api.models.IconsList
 import com.squareup.moshi.Moshi

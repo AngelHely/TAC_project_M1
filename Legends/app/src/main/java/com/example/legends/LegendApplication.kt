@@ -1,17 +1,12 @@
 package com.example.legends
 
 import android.app.Application
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.legends.mvvm.repository.CharacterRepository
 import com.example.legends.mvvm.repository.IconRepository
 import com.example.legends.mvvm.useCase.CharacterUseCase
 import com.example.legends.mvvm.useCase.IconUseCase
-import com.example.legends.mvvm.viewModels.IconViewModel
-import com.example.legends.mvvm.viewModels.IconViewModelFactory
-import com.example.legends.room.dao.CharacterDao
-import com.example.legends.room.database.CharacterDataBase
+import com.example.legends.room.CharacterDao
+import com.example.legends.room.CharacterDataBase
 
 class LegendApplication() : Application() {
 

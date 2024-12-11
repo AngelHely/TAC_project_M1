@@ -4,7 +4,7 @@ import com.example.legends.api.APIService
 import com.example.legends.api.models.Character
 import com.example.legends.api.models.CharacterRes
 import com.example.legends.api.models.Icon
-import com.example.legends.room.dao.CharacterDao
+import com.example.legends.room.CharacterDao
 
 class  CharacterRepository(private val dao : CharacterDao) {
 
