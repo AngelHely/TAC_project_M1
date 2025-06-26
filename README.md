@@ -1,12 +1,12 @@
 # Projet TAC M1 2024-2025
  
- ## Auteurs : 
+ ## Authors : 
  
 - Potel Nicolas
 - Hely Angel 
 
  
-# Objectif de l'application 
+# Application objectives
 
-L'application consiste à afficher une liste des personnages du jeu vidéo *League of Legends* et, pour chaque personnage, l'application donnera les détails de ce même personnage.
+The application consists of displaying a list of characters from the video game *League of Legends* and for each character the application will give the details of that same character.
 
